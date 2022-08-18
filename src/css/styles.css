@@ -10,14 +10,43 @@ body {
   background-color: #fafafa;
   color: #212121;
   line-height: 1.5;
+  margin:0;
 }
 
-#search-box {
-  font: inherit;
-  padding: 8px;
-  max-width: 320px;
-  margin-bottom: 16px;
+.form-container{
+  width: 100%;
+  background-color: #00f;
+  position: fixed;
+  display: flex;
+  justify-content: center;
 }
+
+.container {
+  padding-top: 70px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
+
+#search-form {
+ padding: 20px;
+
+}
+
+.gallery {
+  
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.photo-card{
+  width: 24%;
+  display: flex;
+  flex-direction: column;
+}
+
+
 
 li {
   display: flex;

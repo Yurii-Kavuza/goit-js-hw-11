@@ -1,3 +1,21 @@
+const cardInfo = card => `<div class="photo-card">
+  <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" data-source="${card.largeImageURL}"/>
+  <div class="info">
+    <p class="info-item">
+      <b>Likes</b>${card.likes}
+    </p>
+    <p class="info-item">
+      <b>Views</b> ${card.views}
+    </p>
+    <p class="info-item">
+      <b>Comments</b>${card.comments}
+    </p>
+    <p class="info-item">
+      <b>Downloads</b>${card.downloads}
+    </p>
+  </div>
+</div>`;
+
 const countryInfo = country => `<li>
 <img class="img--big" src="${country.flags.svg}">
 <span class="result-country"> ${country.name.official}</span></li>
@@ -12,4 +30,4 @@ const countriesList = country =>
 </li>
 `;
 
-export { countryInfo, countriesList };
+export { cardInfo };
