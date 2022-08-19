@@ -1,40 +1,64 @@
 import './css/styles.css';
-import './css/cards.css';
-import dedoubce from 'lodash.debounce';
 import { Notify } from 'notiflix';
-import { fetchPictures } from './js/fetchPictures';
-//import getRefs from './js/getRefs';
+import PixabeyApiService from './js/pixabey-api-service';
 import { cardInfo } from './js/markup';
+import LoadMoreBtn from './js/load-more-btn';
 
 const refs = {
   cardContainer: document.querySelector('.gallery'),
   form: document.querySelector('#search-form'),
   input: document.querySelector('[name="searchQuery"]'),
+  //loadMoreBtn: document.querySelector('.load-more'),
 };
 
+const loadMoreBtn = new LoadMoreBtn({ selector: '.load-more', hidden: true });
+const pixabeyApiService = new PixabeyApiService();
+
+console.log(loadMoreBtn);
+
 refs.form.addEventListener('submit', onSearch);
-console.log(refs);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
+//refs.loadMoreBtn.addEventListener('click', onLoadMore);
 
 function onSearch(e) {
   e.preventDefault();
 
-  const form = e.currentTarget;
-  console.log(form);
-  const searchedQuery = form.elements.searchQuery.value;
+  pixabeyApiService.searchedQuery = e.currentTarget.elements.searchQuery.value;
 
-  fetchPictures(searchedQuery, 1)
-    .then(({ total, hits }) => {
-      cleanMarkup();
-      renderMarkup(hits);
-      Notify.success(`Hooray! We found ${total} images.`);
-    })
-    .catch(onFetchError);
+  pixabeyApiService.resetPage();
+  loadMoreBtn.show();
+  loadMoreBtn.disable();
+  pixabeyApiService.fetchPictures().then(({ total, hits }) => {
+    cleanMarkup();
+    renderMarkup(hits);
+    checkFirstInput(hits, total);
+  });
+}
+
+function onLoadMore() {
+  loadMoreBtn.disable();
+  pixabeyApiService.fetchPictures().then(({ hits }) => {
+    renderMarkup(hits);
+    loadMoreBtn.enable();
+  });
 }
 
 function renderMarkup(data) {
   let markup = '';
   markup = createMarkup(data);
   refs.cardContainer.insertAdjacentHTML('beforeend', markup);
+}
+
+function checkFirstInput(hits, total) {
+  if (hits.length === 0) {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    loadMoreBtn.hide();
+  } else {
+    Notify.success(`Hooray! We found ${total} images.`);
+    loadMoreBtn.enable();
+  }
 }
 
 // const DEBOUNCE_DELAY = 300;
@@ -57,13 +81,14 @@ function renderMarkup(data) {
 //     .catch(onFetchError);
 // }
 
-// function verifyDataMaxLength(data) {
-//   if (data.length > 10) {
-//     Notify.info('Too many matches found. Please enter a more specific name.');
-//   } else {
-//     return data;
-//   }
-// }
+function verifyDataLength(data) {
+  if (data.length === 0) {
+    Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+    return;
+  }
+}
 
 // function renderMarkup(countries) {
 //   const quantity = countries.length;
