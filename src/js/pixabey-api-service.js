@@ -1,3 +1,6 @@
+import { Notify } from 'notiflix';
+import axios from 'axios';
+
 const API_KEY = '29343329-eb32098cf47fcc64118c9b881';
 const BASE_URL = 'https://pixabay.com/api';
 const IMG_TYPE = 'photo';
@@ -11,15 +14,16 @@ export default class PixabeyApiService {
     this.page = 1;
   }
 
-  fetchPictures() {
+  async getPictures() {
     const fullQuery = `${BASE_URL}/?key=${API_KEY}&q=${this.searchedQuery}&image_type=${IMG_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFE_SEARCH}&per_page=${PER_PAGE}&page=${this.page}`;
 
-    return fetch(fullQuery)
-      .then(response => response.json())
-      .then(data => {
-        this.incrementPage();
-        return data;
-      });
+    try {
+      const response = await axios.get(fullQuery);
+      this.incrementPage();
+      return response.data;
+    } catch {
+      Notify.failure('Wrong request!');
+    }
   }
 
   incrementPage() {
