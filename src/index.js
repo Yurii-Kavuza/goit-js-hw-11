@@ -3,6 +3,8 @@ import { Notify } from 'notiflix';
 import PixabeyApiService from './js/pixabey-api-service';
 import { cardInfo } from './js/markup';
 import LoadMoreBtn from './js/load-more-btn';
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const refs = {
   cardContainer: document.querySelector('.gallery'),
@@ -12,6 +14,11 @@ const refs = {
 
 const loadMoreBtn = new LoadMoreBtn({ selector: '.load-more', hidden: true });
 const pixabeyApiService = new PixabeyApiService();
+const lightbox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
 
 refs.form.addEventListener('submit', onSearch);
 loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
@@ -47,6 +54,7 @@ function renderMarkup(data) {
   let markup = '';
   markup = createMarkup(data);
   refs.cardContainer.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
 }
 
 function checkFirstInput(hits, total) {

@@ -54,6 +54,17 @@ body {
   flex-wrap: wrap;
 }
 
+.gallery__link {
+  display: block;
+  text-decoration: none;
+  color: #212121;
+}
+
+.gallery__image {
+  width: 100%;
+  height: auto;
+}
+
 .photo-card {
   width: 24%;
   display: flex;

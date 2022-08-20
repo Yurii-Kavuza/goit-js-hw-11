@@ -1,6 +1,8 @@
 const cardInfo = card => `<div class="photo-card">
-  <img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" data-source="${card.largeImageURL}"/>
-  <div class="info">
+  <a href="${card.largeImageURL}" class="gallery__link">
+<img src="${card.webformatURL}" alt="${card.tags}" loading="lazy" data-source="${card.largeImageURL}" class="gallery__image"/>
+</a>  
+<div class="info">
     <p class="info-item">
       <b>Likes</b>${card.likes}
     </p>
@@ -14,7 +16,11 @@ const cardInfo = card => `<div class="photo-card">
       <b>Downloads</b>${card.downloads}
     </p>
   </div>
+  
 </div>`;
+
+//
+//
 
 const countryInfo = country => `<li>
 <img class="img--big" src="${country.flags.svg}">
