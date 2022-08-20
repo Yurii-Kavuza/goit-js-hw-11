@@ -37,9 +37,13 @@ function onSearch(e) {
 
 function onLoadMore() {
   loadMoreBtn.disable();
-  pixabeyApiService.fetchPictures().then(({ hits }) => {
+  pixabeyApiService.fetchPictures().then(({ total, hits }) => {
     renderMarkup(hits);
     loadMoreBtn.enable();
+    checkLastPage(
+      pixabeyApiService.getPage(),
+      pixabeyApiService.getTotalPages(total)
+    );
   });
 }
 
@@ -58,6 +62,19 @@ function checkFirstInput(hits, total) {
   } else {
     Notify.success(`Hooray! We found ${total} images.`);
     loadMoreBtn.enable();
+    checkLastPage(
+      pixabeyApiService.getPage(),
+      pixabeyApiService.getTotalPages(total)
+    );
+  }
+}
+
+function checkLastPage(currentPage, totalPages) {
+  if (currentPage > totalPages) {
+    loadMoreBtn.hide();
+    setTimeout(() => {
+      Notify.info("We're sorry, but you've reached the end of search results.");
+    }, 1500);
   }
 }
 

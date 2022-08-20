@@ -34,6 +34,10 @@ export default class PixabeyApiService {
     return this.page;
   }
 
+  getTotalPages(total) {
+    return Math.ceil(total / PER_PAGE);
+  }
+
   get searchQuery() {
     return this.searchedQuery;
   }
