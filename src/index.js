@@ -31,7 +31,7 @@ function onSearch(e) {
   pixabeyApiService.resetPage();
   loadMoreBtn.show();
   loadMoreBtn.disable();
-  //e.currentTarget.reset();
+  e.currentTarget.reset();
   pixabeyApiService.getPictures().then(({ total, hits }) => {
     cleanMarkup();
     renderMarkup(hits);
